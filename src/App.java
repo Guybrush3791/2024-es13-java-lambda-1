@@ -1,10 +1,13 @@
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class App {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         // testCol1();
 
@@ -122,6 +125,118 @@ public class App {
                 .map(doubleIt)
                 // .map(v -> v * 2)
                 .forEach(System.out::println);
+
+        int max = values.stream()
+                .max((v1, v2) -> v1 - v2)
+                .get();
+
+        System.out.println("max: " + max);
+
+        List<Employee> emps = Arrays.asList(
+                new Employee("Mario", 1000),
+                new Employee("Luigi", 2000),
+                new Employee("Peach", 3000),
+                new Employee("Toad", 4000),
+                new Employee("Bowser", 5000));
+
+        System.out.println("-----------------------------------");
+        System.out.println(emps);
+        System.out.println("-----------------------------------");
+
+        int maxSalary = Integer.MIN_VALUE;
+        Employee maxEmp = null;
+        for (Employee e : emps)
+            if (maxSalary < e.getSalary()) {
+                maxSalary = e.getSalary();
+                maxEmp = e;
+            }
+        System.out.println(maxEmp);
+
+        System.out.println("-----------------------------------");
+
+        Employee maxEmp2 = emps.stream()
+                .max((e1, e2) -> e1.getSalary() - e2.getSalary())
+                .get();
+        System.out.println(maxEmp2);
+
+        System.out.println("-----------------------------------");
+
+        int maxSalary2 = emps.stream()
+                .map(Employee::getSalary)
+                .max((s1, s2) -> s1 - s2)
+                .get();
+        System.out.println("maxSalary2: " + maxSalary2);
+
+        System.out.println("-----------------------------------");
+
+        emps.stream()
+                .map(Employee::getSalary)
+                .forEach(System.out::println);
+
+        System.out.println("-----------------------------------");
+
+        int acc = 1;
+        for (int v : values)
+            acc *= v;
+        System.out.println("acc: " + acc);
+
+        System.out.println("-----------------------------------");
+
+        int sum = values.stream()
+                // .reduce(0, (v1, v2) -> v1 + v2);
+                .reduce(1, (v1, v2) -> v1 * v2);
+        System.out.println("sum: " + sum);
+
+        System.out.println("-----------------------------------");
+
+        int sumSalary = emps.stream()
+                .map(Employee::getSalary)
+                .reduce(0, (s1, s2) -> s1 + s2);
+        System.out.println("sum Salary: " + sumSalary);
+
+        System.out.println("-----------------------------------");
+
+        Integer[] arrValues = values.stream()
+                .toArray(Integer[]::new);
+
+        Employee[] arrEmps = emps.stream()
+                .toArray(Employee[]::new);
+
+        List<Integer> listValue = values.stream()
+                .filter(v -> v % 2 == 0)
+                .toList();
+
+        System.out.println("-----------------------------------");
+
+        String strRes = "";
+        for (int x = 0; x < listValue.size(); x++) {
+
+            strRes += listValue.get(x);
+            if (x < listValue.size() - 1)
+                strRes += ", ";
+        }
+
+        System.out.println("strRes: " + strRes);
+
+        System.out.println("-----------------------------------");
+
+        String strRes2 = listValue.stream()
+                .map(v -> "(" + v.toString() + ")")
+                .collect(Collectors.joining(", "));
+        System.out.println("strRes2: " + strRes2);
+
+        System.out.println("-----------------------------------");
+
+        Optional<Integer> optValue = values.stream()
+                .filter(v -> v % 2 == 0)
+                .findFirst();
+
+        if (optValue.isPresent()) {
+
+            int actualValue = optValue.get();
+            System.out.println("optValue: " + actualValue);
+        } else
+            System.out.println("optValue: not found");
 
         // values = values.stream()
         // .map(v -> v * 2)
