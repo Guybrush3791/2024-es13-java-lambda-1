@@ -1,6 +1,7 @@
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -71,7 +72,7 @@ public class App {
 
     public static void testStreamCollection1() {
 
-        List<Integer> values = Arrays.asList(3, 9, 11, 20, 25, 30, 33, -40, 45, 50);
+        List<Integer> values = Arrays.asList(3, 9, 11, 20, 45, 30, 33, -40, 45, 50);
 
         System.out.println("-----------------------------------");
 
@@ -100,6 +101,31 @@ public class App {
         System.out.println("isAllPos: " + isAllPos);
 
         System.out.println("-----------------------------------");
+
+        values.stream()
+                .limit(3)
+                .forEach(System.out::println);
+
+        System.out.println("-----------------------------------");
+
+        values.stream()
+                .distinct()
+                .forEach(System.out::println);
+
+        System.out.println("-----------------------------------");
+
+        Function<Integer, Integer> doubleIt = v -> v * 2;
+
+        values.stream()
+                .distinct()
+                .filter(v -> v % 2 == 0)
+                .map(doubleIt)
+                // .map(v -> v * 2)
+                .forEach(System.out::println);
+
+        // values = values.stream()
+        // .map(v -> v * 2)
+        // .toList();
 
         System.out.println("The end");
     }
